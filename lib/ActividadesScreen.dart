@@ -35,7 +35,7 @@ class _ActividadesScreenState extends State<ActividadesScreen> {
     sincronizar();
   }
 
-  // ================= SINCRONIZAR =================
+  //  SINCRONIZAR
   Future<void> sincronizar() async {
     final db = DatabaseHelper.instance;
     final user = supabase.auth.currentUser;
@@ -56,7 +56,7 @@ class _ActividadesScreenState extends State<ActividadesScreen> {
     }
   }
 
-  // ================= OBTENER NOTAS =================
+  //  OBTENER NOTAS
   Future<List<Map<String, dynamic>>> _obtenerNotas() async {
     final db = DatabaseHelper.instance;
     final user = supabase.auth.currentUser;
@@ -216,7 +216,7 @@ class _ActividadesScreenState extends State<ActividadesScreen> {
     return total / 4;
   }
 
-  // ================= UI =================
+  //  UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -278,7 +278,7 @@ class _ActividadesScreenState extends State<ActividadesScreen> {
                 ),
               ),
 
-              // ================= PROMEDIO =================
+              //  PROMEDIO
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -313,7 +313,7 @@ class _ActividadesScreenState extends State<ActividadesScreen> {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      promedio >= 3 ? "Aprobado ✅" : "Reprobado ❌",
+                      promedio >= 3 ? "Aprobado " : "Reprobado ",
                     ),
                   ],
                 ),

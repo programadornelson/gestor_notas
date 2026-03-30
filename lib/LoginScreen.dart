@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Login exitoso")),
         );
-        // 👉 AQUÍ VA LA NAVEGACIÓN (IMPORTANTE)
+        //  AQUÍ VA LA NAVEGACIÓN (IMPORTANTE)
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
