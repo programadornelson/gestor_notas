@@ -67,6 +67,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
         final response = await supabase.auth.signUp(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
+          emailRedirectTo: 'https://programadornelson.github.io/registro-exitoso/',
         );
 
         // Cerrar loading

@@ -3,6 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'database_helper.dart';
 
+import 'auth_guard.dart';
+
 class ActividadesScreen extends StatefulWidget {
   final String materia;
 
@@ -10,6 +12,7 @@ class ActividadesScreen extends StatefulWidget {
 
   @override
   State<ActividadesScreen> createState() => _ActividadesScreenState();
+
 }
 
 class _ActividadesScreenState extends State<ActividadesScreen> {
@@ -219,6 +222,10 @@ class _ActividadesScreenState extends State<ActividadesScreen> {
   //  UI
   @override
   Widget build(BuildContext context) {
+
+    if (!AuthGuard.verificar(context)) {
+      return const SizedBox();
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.materia),

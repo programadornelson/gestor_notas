@@ -1,103 +1,122 @@
-import 'package:flutter/material.dart' ;
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:gestor_notas/MateriasScreen.dart';
-import 'package:gestor_notas/RegistroScreen.dart';
-import 'package:gestor_notas/main.dart';
 
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'HomeScreen.dart';
+import 'RegistroScreen.dart';
+import 'session_service.dart';
+import 'package:provider/provider.dart';
+import 'providers/app_provider.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginScreen> createState() =>
+      _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  //METODO NUEVO
+  final _emailController =
+  TextEditingController();
 
-  //HASTA AQUI
-  // VALIDAR EMAIL
+  final _passwordController =
+  TextEditingController();
+
   String? validarEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return "El correo es obligatorio";
+      return "Ingrese correo";
     }
+
     if (!value.endsWith("@gmail.com")) {
-      return "Debe ser un correo Gmail válido";
+      return "Correo inválido";
     }
+
     return null;
   }
 
-  // VALIDAR PASSWORD
   String? validarPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return "La contraseña es obligatoria";
+      return "Ingrese contraseña";
     }
+
     if (value.length < 6) {
       return "Mínimo 6 caracteres";
     }
+
     return null;
   }
-
-  // LOGIN CON SUPABASE
 
   Future<void> _login() async {
     final supabase = Supabase.instance.client;
 
     if (_formKey.currentState!.validate()) {
       try {
-        // Mostrar loading
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) => const Center(
-            child: CircularProgressIndicator(),
+          builder: (_) => const Center(
+            child:
+            CircularProgressIndicator(),
           ),
         );
 
-        // Login en Supabase
-        await supabase.auth.signInWithPassword(
+        final response =
+        await supabase.auth
+            .signInWithPassword(
           email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
+          password:
+          _passwordController.text.trim(),
         );
 
-        // Cerrar loading
+        final token =
+            response.session?.accessToken;
+
+        if (token != null) {
+          await SessionService
+              .guardarToken(token);
+        }
+
+        if (!mounted) return;
+
         Navigator.pop(context);
 
-        // Mensaje éxito
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Login exitoso")),
+//  GUARDAR USUARIO EN PROVIDER
+        Provider.of<AppProvider>(
+          context,
+          listen: false,
+        ).iniciarSesion(
+          _emailController.text.trim(),
         );
-        //  AQUÍ VA LA NAVEGACIÓN (IMPORTANTE)
+
+// IR A HOME
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => const MateriasScreen(),
+            builder: (_) => const HomeScreen(),
           ),
         );
-
       } catch (e) {
-        // Cerrar loading si falla
         Navigator.pop(context);
 
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
           SnackBar(
-            content: Text("Error: ${e.toString()}"),
+            content:
+            Text("Error: $e"),
           ),
         );
       }
     }
   }
 
-
-  // IR A REGISTRO
-  void _irARegistro() {
+  void _irRegistro() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const RegistroScreen()),
+      MaterialPageRoute(
+        builder: (_) =>
+        const RegistroScreen(),
+      ),
     );
   }
 
@@ -106,70 +125,54 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
-        centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
-
+        padding:
+        const EdgeInsets.all(20),
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment:
+            MainAxisAlignment.center,
             children: [
-
-              const Text(
-                "Notas Académicas",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+              TextFormField(
+                controller:
+                _emailController,
+                validator:
+                validarEmail,
+                decoration:
+                const InputDecoration(
+                  labelText:
+                  "Correo Gmail",
                 ),
               ),
-
-              const SizedBox(height: 30),
-
-              // EMAIL
+              const SizedBox(
+                  height: 20),
               TextFormField(
-                controller: _emailController,
-                validator: validarEmail,
-                decoration: const InputDecoration(
-                  labelText: "Correo Gmail",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // PASSWORD
-              TextFormField(
-                controller: _passwordController,
+                controller:
+                _passwordController,
                 obscureText: true,
-                validator: validarPassword,
-                decoration: const InputDecoration(
-                  labelText: "Contraseña",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.lock),
+                validator:
+                validarPassword,
+                decoration:
+                const InputDecoration(
+                  labelText:
+                  "Contraseña",
                 ),
               ),
-
-              const SizedBox(height: 30),
-
-              // BOTÓN LOGIN
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _login,
-                  child: const Text("Iniciar Sesión"),
-                ),
+              const SizedBox(
+                  height: 30),
+              ElevatedButton(
+                onPressed: _login,
+                child: const Text(
+                    "Ingresar"),
               ),
-
-              const SizedBox(height: 15),
-
-              // IR A REGISTRO
               TextButton(
-                onPressed: _irARegistro,
-                child: const Text("¿No tienes cuenta? Regístrate"),
-              ),
+                onPressed:
+                _irRegistro,
+                child: const Text(
+                    "Registrarse"),
+              )
             ],
           ),
         ),

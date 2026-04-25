@@ -1,14 +1,18 @@
 import 'package:gestor_notas/LoginScreen.dart';
-import 'package:gestor_notas/main.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:gestor_notas/ActividadesScreen.dart';
+
+import 'auth_guard.dart';
 
 class MateriasScreen extends StatelessWidget {
   const MateriasScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    if (!AuthGuard.verificar(context)) {
+      return const SizedBox();
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Materias"),
@@ -16,7 +20,8 @@ class MateriasScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () async {
+            onPressed: () async
+            {
               final supabase = Supabase.instance.client;
 
               // Confirmación antes de salir
