@@ -1,40 +1,73 @@
-#  Notas Académicas - Flutter
+# Gestor de Notas Académicas
 
-Aplicación móvil desarrollada en Flutter para la gestión de notas académicas, con almacenamiento en la nube (Supabase) y persistencia local (SQLite).
-
----
-
-##  Funcionalidades
-
-- Registro e inicio de sesión
-- Gestión de materias
-- CRUD de notas
-- Cálculo de promedio
-- Modo offline (SQLite)
-- Sincronización automática con Supabase
+Aplicación móvil desarrollada en Flutter para la gestión de notas académicas con autenticación segura, almacenamiento remoto y persistencia local offline.
 
 ---
 
-## Tecnologías utilizadas
+##  Características principales
 
-- Flutter (Dart)
-- Supabase (Backend)
-- SQLite (sqflite)
-- Connectivity Plus
-
----
-
-##  Modo Offline
-
-La aplicación permite:
-
-- Guardar notas sin conexión
-- Sincronizar automáticamente al recuperar internet
+*  Registro e inicio de sesión con Supabase  
+*  Persistencia de sesión segura (Secure Storage)  
+*  CRUD de notas académicas  
+*  Gestión por materias  
+*  Promedio automático de notas  
+*  Modo offline con SQLite  
+*  Sincronización automática al recuperar internet  
+*  Uso de Provider (estado global)  
+*  Cámara para foto de perfil  
+*  Geolocalización bajo demanda  
+* Control de permisos Android modernos
 
 ---
 
+##  Tecnologías utilizadas
 
+- Flutter
+- Dart
+- Supabase
+- SQLite
+- Provider
+- Secure Storage
+- Image Picker
+- Geolocator
+
+---
+
+##  Pantallas principales
+
+- Login
+- Registro
+- HomeScreen
+- Materias
+- Actividades / CRUD Notas
+
+---
+
+##  Seguridad implementada
+
+- Autenticación con Supabase Auth
+- Persistencia segura con token
+- Protección de rutas
+- Cierre de sesión seguro
+
+---
+
+##  Permisos usados
+
+- Cámara (foto perfil)
+- Ubicación GPS (solo cuando usuario la solicita)
+
+---
+
+##  Instalación
+
+```bash
+git clone https://github.com/programadornelson/gestor_notas.git
+cd gestor_notas
+flutter pub get
+flutter run
+
+---
 
 ##  Autor
-
 Nelson Adrian Ramirez
